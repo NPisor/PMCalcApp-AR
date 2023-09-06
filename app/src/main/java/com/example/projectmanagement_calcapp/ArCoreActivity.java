@@ -1,4 +1,6 @@
 package com.example.projectmanagement_calcapp;
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -39,6 +41,7 @@ import com.google.ar.sceneform.ux.TransformableNode;
 import com.gorisse.thomas.sceneform.light.LightEstimationConfig;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutionException;
 
 public class ArCoreActivity extends AppCompatActivity implements FragmentOnAttachListener,
         BaseArFragment.OnTapArPlaneListener,
@@ -92,7 +95,7 @@ public class ArCoreActivity extends AppCompatActivity implements FragmentOnAttac
                     return null;
                 });
         ViewRenderable.builder()
-                .setView(this, R.layout.select_assignee_widget)
+                .setView(this, R.layout.view_model_title)
                 .build()
                 .thenAccept(viewRenderable -> {
                     ArCoreActivity activity = weakActivity.get();
@@ -138,19 +141,27 @@ public class ArCoreActivity extends AppCompatActivity implements FragmentOnAttac
 
     @Override
     public void onTapPlane(HitResult hitResult, Plane plane, MotionEvent motionEvent) {
-        Anchor anchor = anchorHandler.placeAnchor(this, arFragment, hitResult, model, viewRenderable);
-
-        Future future = arFragment.getArSceneView().getSession().hostCloudAnchorAsync(anchor, 1, (s, cloudAnchorState) -> {
-                if (cloudAnchorState.isError()) {
-                    Toast.makeText(ArCoreActivity.this, "Error hosting anchor: " + cloudAnchorState, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                try {
-                    Toast.makeText(ArCoreActivity.this, "Now hosting anchor...", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+        try {
+            anchorHandler.placeAnchor(this, arFragment, hitResult, model, viewRenderable);
+            anchorHandler.displayTaskEntryScreen(this);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+//        Anchor anchor = anchorHandler.placeAnchor(this, arFragment, hitResult, model, viewRenderable);
+//
+//        Future future = arFragment.getArSceneView().getSession().hostCloudAnchorAsync(anchor, 1, (s, cloudAnchorState) -> {
+//                if (cloudAnchorState.isError()) {
+//                    Toast.makeText(ArCoreActivity.this, "Error hosting anchor: " + cloudAnchorState, Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                try {
+//                    Toast.makeText(ArCoreActivity.this, "Now hosting anchor...", Toast.LENGTH_LONG).show();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            });
     }
 
 }

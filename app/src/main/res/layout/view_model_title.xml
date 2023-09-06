@@ -23,8 +23,8 @@
             android:background="@android:drawable/dialog_holo_dark_frame"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/NodeId"
+            <ImageView
+                android:id="@+id/TaskImage"
                 android:layout_width="match_parent"
                 android:layout_height="555dp"
                 android:layout_weight="1"

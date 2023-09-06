@@ -1,5 +1,7 @@
 package com.example.projectmanagement_calcapp;
 
+import android.graphics.Bitmap;
+
 import java.sql.Timestamp;
 
 import lombok.Data;
@@ -18,9 +20,9 @@ public class AnchorTask {
     Timestamp completedTs;
     Long status;
     Long clientId;
-    String taskImageUrl;
+    Bitmap taskImage;
 
-    public AnchorTask(Long id, String message, Long assignerId, Long assigneeId, String taskDescription, Long priority, Timestamp createdTs, Timestamp submittedForReviewTs, Timestamp completedTs, Long status, Long clientId, String taskImageUrl) {
+    public AnchorTask(Long id, String message, Long assignerId, Long assigneeId, String taskDescription, Long priority, Timestamp createdTs, Timestamp submittedForReviewTs, Timestamp completedTs, Long status, Long clientId, Bitmap taskImage) {
         this.id = id;
         this.message = message;
         this.assignerId = assignerId;
@@ -32,8 +34,11 @@ public class AnchorTask {
         this.completedTs = completedTs;
         this.status = status;
         this.clientId = clientId;
-        this.taskImageUrl = taskImageUrl;
+        this.taskImage = taskImage;
     }
 
 
+    public AnchorTask() {
+
+    }
 }

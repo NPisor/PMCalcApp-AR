@@ -1,5 +1,8 @@
 package com.example.projectmanagement_calcapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.ListView;
 
 import com.example.projectmanagement_calcapp.TaskDetailsHandler.AssigneeHandler;
@@ -15,10 +18,16 @@ import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
+
 public class AnchorHandler {
     AssigneeHandler assigneeHandler;
 
-    public Anchor placeAnchor(ArCoreActivity activity, ArFragment fragment, HitResult hitResult, Renderable renderable, ViewRenderable viewRenderable) {
+    static ViewRenderable renderable;
+
+
+    public Anchor placeAnchor(ArCoreActivity activity, ArFragment fragment, HitResult hitResult, Renderable renderable, ViewRenderable viewRenderable) throws ExecutionException, InterruptedException {
 
         Anchor anchor = hitResult.createAnchor();
         AnchorNode anchorNode = new AnchorNode(anchor);
@@ -33,6 +42,7 @@ public class AnchorHandler {
         titleNode.setLocalPosition(new Vector3(0.0f, .75f, 0.0f));
         titleNode.setRenderable(viewRenderable);
         titleNode.setEnabled(true);
+        this.renderable = viewRenderable;
 
         fragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             Vector3 cameraPosition = fragment.getArSceneView().getScene().getCamera().getWorldPosition();
@@ -42,9 +52,9 @@ public class AnchorHandler {
             titleNode.setWorldRotation(lookRotation);
             viewRenderable.getView().setAlpha(1 - calculateDistance(fragment.getArSceneView().getScene().getCamera(), model));
         });
-        assigneeHandler = new AssigneeHandler();
-        ListView assigneeListView = (ListView) viewRenderable.getView().findViewById(R.id.assigneeList);
-        assigneeHandler.populateAssigneeList(activity, assigneeListView);
+//        assigneeHandler = new AssigneeHandler();
+//        ListView assigneeListView = (ListView) viewRenderable.getView().findViewById(R.id.assigneeList);
+//        assigneeHandler.populateAssigneeList(activity, assigneeListView);
 
         return anchor;
     }
@@ -71,5 +81,10 @@ public class AnchorHandler {
         convertedDistance = (convertedDistance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE);
 
         return convertedDistance;
+    }
+
+    public void displayTaskEntryScreen(ArCoreActivity activity){
+        Intent intent = new Intent(activity, TaskInfoActivity.class);
+        activity.startActivity(intent);
     }
 }
