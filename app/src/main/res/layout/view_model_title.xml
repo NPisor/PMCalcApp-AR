@@ -26,7 +26,7 @@
             <ImageView
                 android:id="@+id/TaskImage"
                 android:layout_width="match_parent"
-                android:layout_height="555dp"
+                android:layout_height="250dp"
                 android:layout_weight="1"
                 android:alpha=".75"
                 android:gravity="center"
